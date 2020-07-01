@@ -1,0 +1,52 @@
+#import modules
+import os
+import csv
+#defining path
+csv_path = os.path.join("Resources", "budget_data.csv")
+with open(csv_path) as csv_file:
+    # CSV reader specifies delimiter and variable that holds contents
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    
+    #printing header for output
+    print("Financial Analysis")
+    print("------------------")
+    #number of months
+    row_count = sum(1 for row in csv_file)
+    print("Total Months: " + str(row_count))
+    
+#calculating the sum of the profits/losses column
+with open(csv_path) as csv_file:
+    csv_reader = csv.reader(csv_file)
+    next(csv_reader)
+    tot = 0
+    big = 0
+    small = 0
+    for row in csv_reader:
+        profit = float(row[1])
+        tot = profit + tot
+        #calculating the max
+        if profit > big:
+            big = profit
+            month = row[0]
+        #calculating the min
+        if profit < small:
+            small = profit
+            month2 = row[0]
+    #calculating the average from the total
+    average = tot/row_count
+    #printing out the data 
+    print("Total $" + str(tot)+"0")
+    print("Average Change $" + "{:.2f}".format(average))
+    print("Greatest Increase in Profits: "+ month + " ($"+str(big)+"0)")
+    print("Greatest Decrease in Profits: "+ month2 + " ($"+str(small)+"0)")
+     # write data in a file. 
+file1 = open("myresults.txt","w") 
+L = ["Total $" + str(tot)+"0 \n","Average Change $" + "{:.2f}".format(average)]
+M = ["\nGreatest Increase in Profits: "+ month + " ($"+str(big)+"0) \n","Greatest Decrease in Profits: "+ month2 + " ($"+str(small)+"0) \n"]  
+  
+# \n is placed to indicate EOL (End of Line) 
+file1.write("Financial Analysis \n-------------------- \n") 
+file1.writelines(L)
+file1.writelines(M)
+file1.close() 
+  
